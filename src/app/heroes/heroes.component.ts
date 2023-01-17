@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { Hero } from '../hero'
 import { HEROES } from '../mock-heroes';
 import { HeroService } from '../hero.service';
+import { ChangeDetectorRef } from '@angular/core';
+
 @Component({
   selector: 'app-heroes',
   templateUrl: './heroes.component.html',
@@ -10,7 +12,7 @@ import { HeroService } from '../hero.service';
 })
 export class HeroesComponent {
 
-  constructor(private heroService: HeroService) { }
+  constructor(private heroService: HeroService, private changeDetector: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.getHeroes();
@@ -27,6 +29,8 @@ export class HeroesComponent {
   }
 
   getHeroes(): void {
-    this.heroes = this.heroService.getHeroes();
+    this.heroService.getHeroes()
+        .subscribe(heroes => this.heroes = heroes)
+        this.changeDetector.detectChanges();
   }
 }
